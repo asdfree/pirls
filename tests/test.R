@@ -1,12 +1,112 @@
-machine_specific_replacements <- 
-	list( 
-		
-		# replace the folder path on macnix
-		c( 'path.expand( \"~\" ) , \"PIRLS\"' , paste0( '"' , getwd() , '"' ) ) ,
-		
-		# change other things in the script to be run
-		c( "hello" , "howdy" )
-	)
 if ( .Platform$OS.type == 'windows' ) memory.limit( 256000 )
 
-source( lodown::syntaxtractor( "pirls" , replacements = machine_specific_replacements , setup_test = "test" ) , echo = TRUE )
+library(lodown)
+# examine all available PIRLS microdata files
+pirls_cat <-
+	get_catalog( "pirls" ,
+		output_dir = file.path( getwd() ) )
+
+# 2011 only
+pirls_cat <- subset( pirls_cat , year == 2011 )
+# download the microdata to your local computer
+stopifnot( nrow( pirls_cat ) > 0 )
+
+library(survey)
+library(mitools)
+
+# load the ASG (student background) + ASH (home background) merged design
+pirls_design <- readRDS( file.path( getwd() , "2011/asg_design.rds" ) )
+pirls_design <- 
+	update( 
+		pirls_design , 
+		
+		one = 1 ,
+		
+		idcntry = factor( idcntry ) ,
+		
+		sex = factor( itsex , labels = c( "male" , "female" ) ) ,
+		
+		born_2001_or_later = as.numeric( itbirthy >= 2001 )
+
+	)
+lodown:::pirls_MIcombine( with( pirls_design , svyby( ~ one , ~ one , unwtd.count ) ) )
+
+lodown:::pirls_MIcombine( with( pirls_design , svyby( ~ one , ~ sex , unwtd.count ) ) )
+lodown:::pirls_MIcombine( with( pirls_design , svytotal( ~ one ) ) )
+
+lodown:::pirls_MIcombine( with( pirls_design ,
+	svyby( ~ one , ~ sex , svytotal )
+) )
+lodown:::pirls_MIcombine( with( pirls_design , svymean( ~ asrrea ) ) )
+
+lodown:::pirls_MIcombine( with( pirls_design ,
+	svyby( ~ asrrea , ~ sex , svymean )
+) )
+lodown:::pirls_MIcombine( with( pirls_design , svymean( ~ idcntry ) ) )
+
+lodown:::pirls_MIcombine( with( pirls_design ,
+	svyby( ~ idcntry , ~ sex , svymean )
+) )
+lodown:::pirls_MIcombine( with( pirls_design , svytotal( ~ asrrea ) ) )
+
+lodown:::pirls_MIcombine( with( pirls_design ,
+	svyby( ~ asrrea , ~ sex , svytotal )
+) )
+lodown:::pirls_MIcombine( with( pirls_design , svytotal( ~ idcntry ) ) )
+
+lodown:::pirls_MIcombine( with( pirls_design ,
+	svyby( ~ idcntry , ~ sex , svytotal )
+) )
+lodown:::pirls_MIcombine( with( pirls_design , svyquantile( ~ asrrea , 0.5 , se = TRUE ) ) )
+
+lodown:::pirls_MIcombine( with( pirls_design ,
+	svyby( 
+		~ asrrea , ~ sex , svyquantile , 0.5 ,
+		se = TRUE , keep.var = TRUE , ci = TRUE 
+) ) )
+lodown:::pirls_MIcombine( with( pirls_design ,
+	svyratio( numerator = ~ asrlit , denominator = ~ asrrea )
+) )
+sub_pirls_design <- subset( pirls_design , idcntry %in% c( 36 , 40 , 31 , 957 ) )
+lodown:::pirls_MIcombine( with( sub_pirls_design , svymean( ~ asrrea ) ) )
+this_result <-
+	lodown:::pirls_MIcombine( with( pirls_design ,
+		svymean( ~ asrrea )
+	) )
+
+coef( this_result )
+SE( this_result )
+confint( this_result )
+cv( this_result )
+
+grouped_result <-
+	lodown:::pirls_MIcombine( with( pirls_design ,
+		svyby( ~ asrrea , ~ sex , svymean )
+	) )
+
+coef( grouped_result )
+SE( grouped_result )
+confint( grouped_result )
+cv( grouped_result )
+degf( pirls_design$designs[[1]] )
+lodown:::pirls_MIcombine( with( pirls_design , svyvar( ~ asrrea ) ) )
+# SRS without replacement
+lodown:::pirls_MIcombine( with( pirls_design ,
+	svymean( ~ asrrea , deff = TRUE )
+) )
+
+# SRS with replacement
+lodown:::pirls_MIcombine( with( pirls_design ,
+	svymean( ~ asrrea , deff = "replace" )
+) )
+lodown:::MIsvyciprop( ~ born_2001_or_later , pirls_design ,
+	method = "likelihood" , na.rm = TRUE )
+lodown:::MIsvyttest( asrrea ~ born_2001_or_later , pirls_design )
+lodown:::MIsvychisq( ~ born_2001_or_later + idcntry , pirls_design )
+glm_result <- 
+	lodown:::pirls_MIcombine( with( pirls_design ,
+		svyglm( asrrea ~ born_2001_or_later + idcntry )
+	) )
+	
+summary( glm_result )
+
