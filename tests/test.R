@@ -68,10 +68,10 @@ lodown:::pirls_MIcombine( with( pirls_design , svytotal( ~ asrrea ) ) )
 lodown:::pirls_MIcombine( with( pirls_design ,
 	svyby( ~ asrrea , ~ idcntry , svytotal )
 ) )
-lodown:::pirls_MIcombine( with( pirls_design , svytotal( ~ sex ) ) )
+lodown:::pirls_MIcombine( with( pirls_design , svytotal( ~ sex , na.rm = TRUE ) ) )
 
 lodown:::pirls_MIcombine( with( pirls_design ,
-	svyby( ~ sex , ~ idcntry , svytotal )
+	svyby( ~ sex , ~ idcntry , svytotal , na.rm = TRUE )
 ) )
 lodown:::pirls_MIcombine( with( pirls_design , svyquantile( ~ asrrea , 0.5 , se = TRUE ) ) )
 
