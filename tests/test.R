@@ -58,10 +58,10 @@ lodown:::pirls_MIcombine( with( pirls_design , svymean( ~ asrrea ) ) )
 lodown:::pirls_MIcombine( with( pirls_design ,
 	svyby( ~ asrrea , ~ idcntry , svymean )
 ) )
-lodown:::pirls_MIcombine( with( pirls_design , svymean( ~ sex ) ) )
+lodown:::pirls_MIcombine( with( pirls_design , svymean( ~ sex , na.rm = TRUE ) ) )
 
 lodown:::pirls_MIcombine( with( pirls_design ,
-	svyby( ~ sex , ~ idcntry , svymean )
+	svyby( ~ sex , ~ idcntry , svymean , na.rm = TRUE )
 ) )
 lodown:::pirls_MIcombine( with( pirls_design , svytotal( ~ asrrea ) ) )
 
