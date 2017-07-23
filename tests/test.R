@@ -16,6 +16,22 @@ library(mitools)
 
 # load the ASG (student background) + ASH (home background) merged design
 pirls_design <- readRDS( file.path( getwd() , "2011/asg_design.rds" ) )
+
+# optional step to limit memory usage
+variables_to_keep <-
+	c( 'idcntry' , 'itsex' , 'itbirthy' , 'asrrea' , 'asrlit' )
+	
+pirls_design$designs <-
+	lapply( 
+		pirls_design$designs ,
+		function( w ) {
+			w$variables <- w$variables[ variables_to_keep ]
+			w
+		}
+	)
+
+gc()
+
 pirls_design <- 
 	update( 
 		pirls_design , 
