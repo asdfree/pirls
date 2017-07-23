@@ -47,37 +47,37 @@ pirls_design <-
 	)
 lodown:::pirls_MIcombine( with( pirls_design , svyby( ~ one , ~ one , unwtd.count ) ) )
 
-lodown:::pirls_MIcombine( with( pirls_design , svyby( ~ one , ~ sex , unwtd.count ) ) )
+lodown:::pirls_MIcombine( with( pirls_design , svyby( ~ one , ~ idcntry , unwtd.count ) ) )
 lodown:::pirls_MIcombine( with( pirls_design , svytotal( ~ one ) ) )
 
 lodown:::pirls_MIcombine( with( pirls_design ,
-	svyby( ~ one , ~ sex , svytotal )
+	svyby( ~ one , ~ idcntry , svytotal )
 ) )
 lodown:::pirls_MIcombine( with( pirls_design , svymean( ~ asrrea ) ) )
 
 lodown:::pirls_MIcombine( with( pirls_design ,
-	svyby( ~ asrrea , ~ sex , svymean )
+	svyby( ~ asrrea , ~ idcntry , svymean )
 ) )
-lodown:::pirls_MIcombine( with( pirls_design , svymean( ~ idcntry ) ) )
+lodown:::pirls_MIcombine( with( pirls_design , svymean( ~ sex ) ) )
 
 lodown:::pirls_MIcombine( with( pirls_design ,
-	svyby( ~ idcntry , ~ sex , svymean )
+	svyby( ~ sex , ~ idcntry , svymean )
 ) )
 lodown:::pirls_MIcombine( with( pirls_design , svytotal( ~ asrrea ) ) )
 
 lodown:::pirls_MIcombine( with( pirls_design ,
-	svyby( ~ asrrea , ~ sex , svytotal )
+	svyby( ~ asrrea , ~ idcntry , svytotal )
 ) )
-lodown:::pirls_MIcombine( with( pirls_design , svytotal( ~ idcntry ) ) )
+lodown:::pirls_MIcombine( with( pirls_design , svytotal( ~ sex ) ) )
 
 lodown:::pirls_MIcombine( with( pirls_design ,
-	svyby( ~ idcntry , ~ sex , svytotal )
+	svyby( ~ sex , ~ idcntry , svytotal )
 ) )
 lodown:::pirls_MIcombine( with( pirls_design , svyquantile( ~ asrrea , 0.5 , se = TRUE ) ) )
 
 lodown:::pirls_MIcombine( with( pirls_design ,
 	svyby( 
-		~ asrrea , ~ sex , svyquantile , 0.5 ,
+		~ asrrea , ~ idcntry , svyquantile , 0.5 ,
 		se = TRUE , keep.var = TRUE , ci = TRUE 
 ) ) )
 lodown:::pirls_MIcombine( with( pirls_design ,
@@ -97,7 +97,7 @@ cv( this_result )
 
 grouped_result <-
 	lodown:::pirls_MIcombine( with( pirls_design ,
-		svyby( ~ asrrea , ~ sex , svymean )
+		svyby( ~ asrrea , ~ idcntry , svymean )
 	) )
 
 coef( grouped_result )
@@ -118,10 +118,10 @@ lodown:::pirls_MIcombine( with( pirls_design ,
 lodown:::MIsvyciprop( ~ born_2001_or_later , pirls_design ,
 	method = "likelihood" , na.rm = TRUE )
 lodown:::MIsvyttest( asrrea ~ born_2001_or_later , pirls_design )
-lodown:::MIsvychisq( ~ born_2001_or_later + idcntry , pirls_design )
+lodown:::MIsvychisq( ~ born_2001_or_later + sex , pirls_design )
 glm_result <- 
 	lodown:::pirls_MIcombine( with( pirls_design ,
-		svyglm( asrrea ~ born_2001_or_later + idcntry )
+		svyglm( asrrea ~ born_2001_or_later + sex )
 	) )
 	
 summary( glm_result )
