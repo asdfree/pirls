@@ -11,7 +11,7 @@ pirls_cat <-
 # 2011 only
 pirls_cat <- subset( pirls_cat , year == 2011 )
 # download the microdata to your local computer
-lodown( "pirls" , pirls_cat )
+
 
 library(survey)
 library(mitools)
