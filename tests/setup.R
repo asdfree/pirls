@@ -1,7 +1,12 @@
 if ( .Platform$OS.type == 'windows' ) memory.limit( 256000 )
 
 library(lodown)
-lodown( "pirls" , output_dir = file.path( getwd() ) )
+this_sample_break <- Sys.getenv( "this_sample_break" )
+pirls_cat <- get_catalog( "pirls" , output_dir = file.path( getwd() ) )
+record_categories <- ceiling( seq( nrow( pirls_cat ) ) / ceiling( nrow( pirls_cat ) / 3 ) )
+pirls_cat <- pirls_cat[ record_categories == this_sample_break , ]
+lodown( "pirls" , pirls_cat )
+if( any( pirls_cat$year == 2011 ) ){
 library(lodown)
 # examine all available PIRLS microdata files
 pirls_cat <-
@@ -128,3 +133,4 @@ glm_result <-
 	
 summary( glm_result )
 
+}
