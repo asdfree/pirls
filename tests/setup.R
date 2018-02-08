@@ -7,17 +7,17 @@ this_sample_break <- Sys.getenv( "this_sample_break" )
 pirls_cat <- get_catalog( "pirls" , output_dir = file.path( getwd() ) )
 record_categories <- ceiling( seq( nrow( pirls_cat ) ) / ceiling( nrow( pirls_cat ) / 3 ) )
 pirls_cat <- pirls_cat[ record_categories == this_sample_break , ]
-lodown( "pirls" , pirls_cat )
+pirls_cat <- lodown( "pirls" , pirls_cat )
 if( any( pirls_cat$year == 2011 ) ){
-library(lodown)
-# examine all available PIRLS microdata files
-pirls_cat <-
-	get_catalog( "pirls" ,
-		output_dir = file.path( getwd() ) )
 
-# 2011 only
-pirls_cat <- subset( pirls_cat , year == 2011 )
-# download the microdata to your local computer
+
+
+
+
+
+
+
+
 
 
 library(survey)
