@@ -54,48 +54,48 @@ pirls_design <-
 		born_2001_or_later = as.numeric( itbirthy >= 2001 )
 
 	)
-lodown:::pirls_MIcombine( with( pirls_design , svyby( ~ one , ~ one , unwtd.count ) ) )
+pirls_MIcombine( with( pirls_design , svyby( ~ one , ~ one , unwtd.count ) ) )
 
-lodown:::pirls_MIcombine( with( pirls_design , svyby( ~ one , ~ idcntry , unwtd.count ) ) )
-lodown:::pirls_MIcombine( with( pirls_design , svytotal( ~ one ) ) )
+pirls_MIcombine( with( pirls_design , svyby( ~ one , ~ idcntry , unwtd.count ) ) )
+pirls_MIcombine( with( pirls_design , svytotal( ~ one ) ) )
 
-lodown:::pirls_MIcombine( with( pirls_design ,
+pirls_MIcombine( with( pirls_design ,
 	svyby( ~ one , ~ idcntry , svytotal )
 ) )
-lodown:::pirls_MIcombine( with( pirls_design , svymean( ~ asrrea ) ) )
+pirls_MIcombine( with( pirls_design , svymean( ~ asrrea ) ) )
 
-lodown:::pirls_MIcombine( with( pirls_design ,
+pirls_MIcombine( with( pirls_design ,
 	svyby( ~ asrrea , ~ idcntry , svymean )
 ) )
-lodown:::pirls_MIcombine( with( pirls_design , svymean( ~ sex , na.rm = TRUE ) ) )
+pirls_MIcombine( with( pirls_design , svymean( ~ sex , na.rm = TRUE ) ) )
 
-lodown:::pirls_MIcombine( with( pirls_design ,
+pirls_MIcombine( with( pirls_design ,
 	svyby( ~ sex , ~ idcntry , svymean , na.rm = TRUE )
 ) )
-lodown:::pirls_MIcombine( with( pirls_design , svytotal( ~ asrrea ) ) )
+pirls_MIcombine( with( pirls_design , svytotal( ~ asrrea ) ) )
 
-lodown:::pirls_MIcombine( with( pirls_design ,
+pirls_MIcombine( with( pirls_design ,
 	svyby( ~ asrrea , ~ idcntry , svytotal )
 ) )
-lodown:::pirls_MIcombine( with( pirls_design , svytotal( ~ sex , na.rm = TRUE ) ) )
+pirls_MIcombine( with( pirls_design , svytotal( ~ sex , na.rm = TRUE ) ) )
 
-lodown:::pirls_MIcombine( with( pirls_design ,
+pirls_MIcombine( with( pirls_design ,
 	svyby( ~ sex , ~ idcntry , svytotal , na.rm = TRUE )
 ) )
-lodown:::pirls_MIcombine( with( pirls_design , svyquantile( ~ asrrea , 0.5 , se = TRUE ) ) )
+pirls_MIcombine( with( pirls_design , svyquantile( ~ asrrea , 0.5 , se = TRUE ) ) )
 
-lodown:::pirls_MIcombine( with( pirls_design ,
+pirls_MIcombine( with( pirls_design ,
 	svyby( 
 		~ asrrea , ~ idcntry , svyquantile , 0.5 ,
 		se = TRUE , keep.var = TRUE , ci = TRUE 
 ) ) )
-lodown:::pirls_MIcombine( with( pirls_design ,
+pirls_MIcombine( with( pirls_design ,
 	svyratio( numerator = ~ asrlit , denominator = ~ asrrea )
 ) )
 sub_pirls_design <- subset( pirls_design , idcntry %in% c( 36 , 40 , 31 , 957 ) )
-lodown:::pirls_MIcombine( with( sub_pirls_design , svymean( ~ asrrea ) ) )
+pirls_MIcombine( with( sub_pirls_design , svymean( ~ asrrea ) ) )
 this_result <-
-	lodown:::pirls_MIcombine( with( pirls_design ,
+	pirls_MIcombine( with( pirls_design ,
 		svymean( ~ asrrea )
 	) )
 
@@ -105,7 +105,7 @@ confint( this_result )
 cv( this_result )
 
 grouped_result <-
-	lodown:::pirls_MIcombine( with( pirls_design ,
+	pirls_MIcombine( with( pirls_design ,
 		svyby( ~ asrrea , ~ idcntry , svymean )
 	) )
 
@@ -114,22 +114,22 @@ SE( grouped_result )
 confint( grouped_result )
 cv( grouped_result )
 degf( pirls_design$designs[[1]] )
-lodown:::pirls_MIcombine( with( pirls_design , svyvar( ~ asrrea ) ) )
+pirls_MIcombine( with( pirls_design , svyvar( ~ asrrea ) ) )
 # SRS without replacement
-lodown:::pirls_MIcombine( with( pirls_design ,
+pirls_MIcombine( with( pirls_design ,
 	svymean( ~ asrrea , deff = TRUE )
 ) )
 
 # SRS with replacement
-lodown:::pirls_MIcombine( with( pirls_design ,
+pirls_MIcombine( with( pirls_design ,
 	svymean( ~ asrrea , deff = "replace" )
 ) )
-lodown:::MIsvyciprop( ~ born_2001_or_later , pirls_design ,
+MIsvyciprop( ~ born_2001_or_later , pirls_design ,
 	method = "likelihood" , na.rm = TRUE )
-lodown:::MIsvyttest( asrrea ~ born_2001_or_later , pirls_design )
-lodown:::MIsvychisq( ~ born_2001_or_later + sex , pirls_design )
+MIsvyttest( asrrea ~ born_2001_or_later , pirls_design )
+MIsvychisq( ~ born_2001_or_later + sex , pirls_design )
 glm_result <- 
-	lodown:::pirls_MIcombine( with( pirls_design ,
+	pirls_MIcombine( with( pirls_design ,
 		svyglm( asrrea ~ born_2001_or_later + sex )
 	) )
 	
