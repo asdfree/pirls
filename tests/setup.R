@@ -82,12 +82,17 @@ pirls_MIcombine( with( pirls_design , svytotal( ~ sex , na.rm = TRUE ) ) )
 pirls_MIcombine( with( pirls_design ,
 	svyby( ~ sex , ~ idcntry , svytotal , na.rm = TRUE )
 ) )
-pirls_MIcombine( with( pirls_design , svyquantile( ~ asrrea , 0.5 , se = TRUE ) ) )
+pirls_MIcombine( with( pirls_design ,
+	svyquantile(
+		~ asrrea ,
+		0.5 , se = TRUE 
+) ) )
 
 pirls_MIcombine( with( pirls_design ,
-	svyby( 
-		~ asrrea , ~ idcntry , svyquantile , 0.5 ,
-		se = TRUE , keep.var = TRUE , ci = TRUE 
+	svyby(
+		~ asrrea , ~ idcntry , svyquantile ,
+		0.5 , se = TRUE ,
+		keep.var = TRUE , ci = TRUE 
 ) ) )
 pirls_MIcombine( with( pirls_design ,
 	svyratio( numerator = ~ asrlit , denominator = ~ asrrea )
