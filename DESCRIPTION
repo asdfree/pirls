@@ -4,7 +4,7 @@ Title: pirls
 Version: 0.1.0
 Author: Anthony Joseph Damico
 Maintainer: Anthony Joseph Damico <ajdamico@gmail.com>
-Description: A continuous integration package, tested on ajdamico/asdfree commit 65348550c693333330a7387088e163eefcfd8181 ajdamico/lodown commit cba6b61689ca42a6d87a93b55d35020a32176c6c
+Description: A continuous integration package, tested on ajdamico/asdfree commit 86e7f1b8aadc170a3fdda5054341dc5f6d595ddb ajdamico/lodown commit cba6b61689ca42a6d87a93b55d35020a32176c6c
 License: GPL-3
 Imports: survey, mitools, lodown
 Encoding: UTF-8
