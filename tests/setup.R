@@ -54,53 +54,53 @@ pirls_design <-
 		age_ten_or_older = as.numeric( asdage >= 10 )
 
 	)
-pirls_MIcombine( with( pirls_design , svyby( ~ one , ~ one , unwtd.count ) ) )
+MIcombine( with( pirls_design , svyby( ~ one , ~ one , unwtd.count ) ) )
 
-pirls_MIcombine( with( pirls_design , svyby( ~ one , ~ idcntry , unwtd.count ) ) )
-pirls_MIcombine( with( pirls_design , svytotal( ~ one ) ) )
+MIcombine( with( pirls_design , svyby( ~ one , ~ idcntry , unwtd.count ) ) )
+MIcombine( with( pirls_design , svytotal( ~ one ) ) )
 
-pirls_MIcombine( with( pirls_design ,
+MIcombine( with( pirls_design ,
 	svyby( ~ one , ~ idcntry , svytotal )
 ) )
-pirls_MIcombine( with( pirls_design , svymean( ~ asrrea ) ) )
+MIcombine( with( pirls_design , svymean( ~ asrrea ) ) )
 
-pirls_MIcombine( with( pirls_design ,
+MIcombine( with( pirls_design ,
 	svyby( ~ asrrea , ~ idcntry , svymean )
 ) )
-pirls_MIcombine( with( pirls_design , svymean( ~ sex , na.rm = TRUE ) ) )
+MIcombine( with( pirls_design , svymean( ~ sex , na.rm = TRUE ) ) )
 
-pirls_MIcombine( with( pirls_design ,
+MIcombine( with( pirls_design ,
 	svyby( ~ sex , ~ idcntry , svymean , na.rm = TRUE )
 ) )
-pirls_MIcombine( with( pirls_design , svytotal( ~ asrrea ) ) )
+MIcombine( with( pirls_design , svytotal( ~ asrrea ) ) )
 
-pirls_MIcombine( with( pirls_design ,
+MIcombine( with( pirls_design ,
 	svyby( ~ asrrea , ~ idcntry , svytotal )
 ) )
-pirls_MIcombine( with( pirls_design , svytotal( ~ sex , na.rm = TRUE ) ) )
+MIcombine( with( pirls_design , svytotal( ~ sex , na.rm = TRUE ) ) )
 
-pirls_MIcombine( with( pirls_design ,
+MIcombine( with( pirls_design ,
 	svyby( ~ sex , ~ idcntry , svytotal , na.rm = TRUE )
 ) )
-pirls_MIcombine( with( pirls_design ,
+MIcombine( with( pirls_design ,
 	svyquantile(
 		~ asrrea ,
 		0.5 , se = TRUE 
 ) ) )
 
-pirls_MIcombine( with( pirls_design ,
+MIcombine( with( pirls_design ,
 	svyby(
 		~ asrrea , ~ idcntry , svyquantile ,
 		0.5 , se = TRUE ,
 		keep.var = TRUE , ci = TRUE 
 ) ) )
-pirls_MIcombine( with( pirls_design ,
+MIcombine( with( pirls_design ,
 	svyratio( numerator = ~ asrlit , denominator = ~ asrrea )
 ) )
 sub_pirls_design <- subset( pirls_design , idcntry %in% c( 36 , 40 , 31 , 957 ) )
-pirls_MIcombine( with( sub_pirls_design , svymean( ~ asrrea ) ) )
+MIcombine( with( sub_pirls_design , svymean( ~ asrrea ) ) )
 this_result <-
-	pirls_MIcombine( with( pirls_design ,
+	MIcombine( with( pirls_design ,
 		svymean( ~ asrrea )
 	) )
 
@@ -110,7 +110,7 @@ confint( this_result )
 cv( this_result )
 
 grouped_result <-
-	pirls_MIcombine( with( pirls_design ,
+	MIcombine( with( pirls_design ,
 		svyby( ~ asrrea , ~ idcntry , svymean )
 	) )
 
@@ -119,14 +119,14 @@ SE( grouped_result )
 confint( grouped_result )
 cv( grouped_result )
 degf( pirls_design$designs[[1]] )
-pirls_MIcombine( with( pirls_design , svyvar( ~ asrrea ) ) )
+MIcombine( with( pirls_design , svyvar( ~ asrrea ) ) )
 # SRS without replacement
-pirls_MIcombine( with( pirls_design ,
+MIcombine( with( pirls_design ,
 	svymean( ~ asrrea , deff = TRUE )
 ) )
 
 # SRS with replacement
-pirls_MIcombine( with( pirls_design ,
+MIcombine( with( pirls_design ,
 	svymean( ~ asrrea , deff = "replace" )
 ) )
 MIsvyciprop( ~ age_ten_or_older , pirls_design ,
@@ -134,10 +134,30 @@ MIsvyciprop( ~ age_ten_or_older , pirls_design ,
 MIsvyttest( asrrea ~ age_ten_or_older , pirls_design )
 MIsvychisq( ~ age_ten_or_older + sex , pirls_design )
 glm_result <- 
-	pirls_MIcombine( with( pirls_design ,
+	MIcombine( with( pirls_design ,
 		svyglm( asrrea ~ age_ten_or_older + sex )
 	) )
 	
 summary( glm_result )
+australia_usa_design <- subset( pirls_design , idcntry %in% c( 36 , 840 ) )
+
+rm( pirls_design ) ; gc()
+
+results <-
+	MIcombine( 
+		with( 
+			australia_usa_design , 
+			svyby( 
+				~ asrrea , 
+				~ idcntry , 
+				svymean 
+			) 
+		) 
+	)
+
+stopifnot( round( coef( results )[1] , 2 ) == 544.36 )
+stopifnot( round( SE( results )[1] , 2 ) == 2.53 )
+stopifnot( round( coef( results )[2] , 2 ) == 549.44 )
+stopifnot( round( SE( results )[2] , 2 ) == 3.09 )
 
 }
