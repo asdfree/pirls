@@ -28,7 +28,7 @@ pirls_design <- readRDS( file.path( getwd() , "2016/asg_design.rds" ) )
 
 # optional step to limit memory usage
 variables_to_keep <-
-	c( 'idcntry' , 'itsex' , 'itbirthy' , 'asrrea' , 'asrlit' )
+	c( 'idcntry' , 'itsex' , 'asdage' , 'asrrea' , 'asrlit' )
 	
 pirls_design$designs <-
 	lapply( 
@@ -51,7 +51,7 @@ pirls_design <-
 		
 		sex = factor( itsex , labels = c( "male" , "female" ) ) ,
 		
-		born_2001_or_later = as.numeric( itbirthy >= 2001 )
+		age_ten_or_older = as.numeric( asdage >= 10 )
 
 	)
 pirls_MIcombine( with( pirls_design , svyby( ~ one , ~ one , unwtd.count ) ) )
@@ -129,13 +129,13 @@ pirls_MIcombine( with( pirls_design ,
 pirls_MIcombine( with( pirls_design ,
 	svymean( ~ asrrea , deff = "replace" )
 ) )
-MIsvyciprop( ~ born_2001_or_later , pirls_design ,
+MIsvyciprop( ~ age_ten_or_older , pirls_design ,
 	method = "likelihood" , na.rm = TRUE )
-MIsvyttest( asrrea ~ born_2001_or_later , pirls_design )
-MIsvychisq( ~ born_2001_or_later + sex , pirls_design )
+MIsvyttest( asrrea ~ age_ten_or_older , pirls_design )
+MIsvychisq( ~ age_ten_or_older + sex , pirls_design )
 glm_result <- 
 	pirls_MIcombine( with( pirls_design ,
-		svyglm( asrrea ~ born_2001_or_later + sex )
+		svyglm( asrrea ~ age_ten_or_older + sex )
 	) )
 	
 summary( glm_result )
