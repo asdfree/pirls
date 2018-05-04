@@ -5,10 +5,10 @@ options("lodown.cachaca.savecache"=FALSE)
 library(lodown)
 this_sample_break <- Sys.getenv( "this_sample_break" )
 pirls_cat <- get_catalog( "pirls" , output_dir = file.path( getwd() ) )
-record_categories <- ceiling( seq( nrow( pirls_cat ) ) / ceiling( nrow( pirls_cat ) / 3 ) )
+record_categories <- ceiling( seq( nrow( pirls_cat ) ) / ceiling( nrow( pirls_cat ) / 4 ) )
 pirls_cat <- pirls_cat[ record_categories == this_sample_break , ]
 pirls_cat <- lodown( "pirls" , pirls_cat )
-if( any( pirls_cat$year == 2011 ) ){
+if( any( pirls_cat$year == 2016 ) ){
 
 
 
@@ -24,7 +24,7 @@ library(survey)
 library(mitools)
 
 # load the ASG (student background) + ASH (home background) merged design
-pirls_design <- readRDS( file.path( getwd() , "2011/asg_design.rds" ) )
+pirls_design <- readRDS( file.path( getwd() , "2016/asg_design.rds" ) )
 
 # optional step to limit memory usage
 variables_to_keep <-
