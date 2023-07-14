@@ -1,5 +1,5 @@
 # lascaux canary
-# bard's caged origin story
+# glyph jump reveal caged bard notes
 # cryogenesis
 pirls_MIcombine <-
 	function (results, variances, call = sys.call(), df.complete = Inf, ...) {
