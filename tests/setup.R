@@ -142,7 +142,6 @@ for( j in 1:75 ){
 }
 
 weights_df[ c( 'jkrep' , 'jkzone' ) ] <- NULL
-
 library(survey)
 library(mitools)
 
